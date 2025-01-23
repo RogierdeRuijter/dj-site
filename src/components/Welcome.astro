@@ -1,5 +1,32 @@
 ---
 import background from '../assets/background.svg';
+const url = import.meta.env.PREPR_URL;
+
+const query = `
+  query {
+    Homepage { 
+      _id
+      title
+    }
+  }
+`;
+
+const response = await fetch(
+  url,
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      query
+    })
+  })
+
+const { data } = await response.json();
+
+const title = data.Homepage.title;
+
 ---
 
 <div id="container">
@@ -7,7 +34,7 @@ import background from '../assets/background.svg';
 	<main>
 		<section id="hero">
 			<h1>
-        KATJA ISABELLA HAGENBEUK
+        {title}
 			</h1>
 			<section id="links">
 				<a class="button" href="https://docs.astro.build">Book me</a>
