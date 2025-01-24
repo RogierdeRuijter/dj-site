@@ -1,5 +1,7 @@
 ---
 import background from '../assets/background.svg';
+import { Image } from 'astro:assets';
+
 const url = import.meta.env.PREPR_URL_PREVIEW ?? import.meta.env.PREPR_URL;
 
 const query = `
@@ -7,6 +9,11 @@ const query = `
     Homepage { 
       _id
       title
+      subtitle
+      hero { 
+        _id
+        url
+		  }
     }
   }
 `;
@@ -26,6 +33,8 @@ const response = await fetch(
 const { data } = await response.json();
 
 const title = data.Homepage.title;
+const imageUrl = data.Homepage.hero.url;
+const subtitle = data.Homepage.subtitle;
 
 ---
 
@@ -33,18 +42,36 @@ const title = data.Homepage.title;
 	<img id="background" src={background.src} alt="" fetchpriority="high" />
 	<main>
 		<section id="hero">
-			<h1>
-        {title}
-			</h1>
-			<section id="links">
+      <Image 
+        src={imageUrl} 
+        width="200" 
+        height="266" 
+        alt="" 
+        sizes="(max-width: 500px) 80vw, 400px"
+        widths={[200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800]} />
+      <hgroup>
+        <h1>
+          {title}
+        </h1>
+        <p>{subtitle}</p>
+      </hgroup>
+      <!-- TODO: add alt -->
+      <!-- <section id="links">
 				<a class="button" href="https://docs.astro.build">Book me</a>
-			</section>
+      </section> -->
 		</section>
 	</main>
 
 </div>
 
 <style>
+  img {
+    width: 400px;
+    height: auto;
+    aspect-ratio: 3/4;
+    border-radius: 8px;
+  }
+
 	#background {
 		position: fixed;
 		top: 0;
@@ -62,22 +89,24 @@ const title = data.Homepage.title;
 
 	main {
 		height: 100%;
-		display: flex;
-		justify-content: center;
 	}
 
 	#hero {
 		display: flex;
-		align-items: start;
-		flex-direction: column;
-		justify-content: center;
 		padding: 16px;
+    gap: 4rem;
 	}
 
-	h1 {
-		font-size: 22px;
-		margin-top: 0.25em;
+  hgroup h1 {
+		font-size: 5vw;
+		margin: 0;
 	}
+
+  hgroup p {
+    font-size: 2vw;
+  }
+
+
 
 	#links {
 		display: flex;

@@ -6,4 +6,9 @@ import netlify from '@astrojs/netlify';
 export default defineConfig({
   output: "server",
   adapter: netlify(),
+  image: {
+    service: {
+      entrypoint: "./src/functions/image-service",
+    },
+  },
 });
