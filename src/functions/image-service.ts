@@ -10,6 +10,8 @@ const preprImageService: ExternalImageService = {
     const src = typeof options.src === "string" ? options.src : options.src.src;
     const url = new URL(src);
 
+    console.log(url);
+
     if (url.host.includes("katja-isabella.stream.prepr.io")) {
       if (options.width) {
         const pathnames = url.pathname.split("/");

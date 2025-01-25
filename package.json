@@ -1,9 +1,10 @@
 {
-  "name": "",
+  "name": "dj-site",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:netlify": "astro dev --config astro.config.server.mjs",
     "build": "astro build",
     "build:netlify": "astro build --config astro.config.server.mjs",
     "preview": "astro preview",
