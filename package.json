@@ -4,15 +4,20 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "dev:netlify": "astro dev --config astro.config.server.mjs",
+    "dev:netlify": "astro dev --config astro.config.netlify.mjs",
+    "dev:node": "astro dev --config astro.config.node.mjs",
     "build": "astro build",
-    "build:netlify": "astro build --config astro.config.server.mjs",
+    "build:netlify": "astro build --config astro.config.netlify.mjs",
+    "build:node": "astro build --config astro.config.node.mjs",
     "preview": "astro preview",
+    "preview:netlify": "astro preview --config astro.config.netlify.mjs",
+    "preview:node": "astro preview --config astro.config.node.mjs",
     "astro": "astro",
     "test": "node --test --experimental-strip-types"
   },
   "dependencies": {
     "@astrojs/netlify": "^6.1.0",
+    "@astrojs/node": "^9.0.2",
     "astro": "^5.1.8",
     "gql": "^1.1.2"
   }
