@@ -20,5 +20,9 @@
     "@astrojs/node": "^9.0.2",
     "astro": "^5.1.8",
     "gql": "^1.1.2"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.1",
+    "prettier-plugin-astro": "^0.14.1"
   }
 }
