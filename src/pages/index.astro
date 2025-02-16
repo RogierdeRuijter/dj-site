@@ -1,7 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import background from "../assets/background.svg";
-import { Image } from "astro:assets";
+import { mapTextComponent } from "../functions/mapTextComponent";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -12,12 +11,6 @@ const query = `
   query {
     Homepage { 
       _id
-      title
-      subtitle
-      hero { 
-        _id
-        url
-      }
       information { 
         __typename
       ... on Spotify {
@@ -36,8 +29,8 @@ const query = `
       }
       ... on Tekst {
         _id
-        text
         distorted
+        text
       }
       ... on Image {
         _id
@@ -67,64 +60,168 @@ const response = await fetch(url, {
 
 const { data } = await response.json();
 
-console.log(data);
-
-const title = data.Homepage.title;
-const imageUrl = data.Homepage.hero.url;
-const subtitle = data.Homepage.subtitle;
+const information = data.Homepage.information;
+const inspiration = data.Homepage.inspiration;
 ---
 
 <Layout>
-  <filter id="n1">
-    <feTurbulence
-      type="fractalNoise"
-      baseFrequency="0.001 0.001"
-      numOctaves="5"
-      result="NOISE"
-      seed="172312"></feTurbulence>
-    <feGaussianBlur in="SourceGraphic" result="BLURRED" stdDeviation="0"
-    ></feGaussianBlur>
-    <feDisplacementMap
-      id="displacer"
-      in2="NOISE"
-      in="BLURRED"
-      scale="15"
-      xChannelSelector="R"
-      yChannelSelector="R"
-      result="DISPLACED"></feDisplacementMap>
-  </filter>
   <div id="container">
-    <img id="background" src={background.src} alt="" fetchpriority="high" />
+    <!-- <img id="background" src={background.src} alt="" fetchpriority="high" /> -->
+    <svg
+      class="fixed inset-0 transform -translate-x-full"
+      style="display: none"
+    >
+      <defs>
+        <filter id="n0">
+          <feTurbulence
+            type="turbulence"
+            baseFrequency="0.001 0.1"
+            numOctaves="5"
+            result="NOISE"></feTurbulence>
+          <feGaussianBlur in="SourceGraphic" result="BLURRED" stdDeviation="4.5"
+          ></feGaussianBlur>
+          <feDisplacementMap
+            in2="NOISE"
+            in="BLURRED"
+            scale="50"
+            xChannelSelector="R"
+            yChannelSelector="G"></feDisplacementMap>
+        </filter>
+        <filter id="n1">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.001 0.001"
+            numOctaves="5"
+            result="NOISE"
+            seed="172821"></feTurbulence>
+          <feGaussianBlur in="SourceGraphic" result="BLURRED" stdDeviation="0"
+          ></feGaussianBlur>
+          <feDisplacementMap
+            id="displacer"
+            in2="NOISE"
+            in="BLURRED"
+            scale="15"
+            xChannelSelector="R"
+            yChannelSelector="R"
+            result="DISPLACED"></feDisplacementMap>
+        </filter>
+        <filter id="n2" color-interpolation-filters="sRGB">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.001 0.001"
+            numOctaves="5"
+            result="NOISE"
+            seed="172821"></feTurbulence>
+          <feGaussianBlur in="SourceGraphic" result="BLURRED" stdDeviation="0"
+          ></feGaussianBlur>
+          <feDisplacementMap
+            id="displacer"
+            in2="NOISE"
+            in="BLURRED"
+            scale="15"
+            xChannelSelector="R"
+            yChannelSelector="R"
+            result="DISPLACED"></feDisplacementMap>
+          <feColorMatrix
+            in="DISPLACED"
+            result="RED"
+            type="matrix"
+            values="0 0 0 0 0
+                            0 1 0 0 0
+                            0 0 1 0 0
+                            0 0 0 1 0"
+          ></feColorMatrix>
+          <feColorMatrix
+            in="DISPLACED"
+            result="GREEN"
+            type="matrix"
+            values="1 0 0 0 0
+                            0 0 0 0 0
+                            0 0 1 0 0
+                            0 0 0 1 0"
+          ></feColorMatrix>
+          <feColorMatrix
+            in="DISPLACED"
+            result="BLUE"
+            type="matrix"
+            values="1 0 0 0 0
+                            0 1 0 0 0
+                            0 0 0 0 0
+                            0 0 0 1 0"
+          ></feColorMatrix>
+          <feOffset in="RED" dx="-3" dy="0" result="D_RED"></feOffset>
+          <feOffset in="GREEN" dx="0" dy="0" result="D_GREEN"></feOffset>
+          <feOffset in="BLUE" dx="3" dy="0" result="D_BLUE"></feOffset>
+          <feBlend in="D_RED" in2="D_BLUE" out="RB" mode="multiply"></feBlend>
+          <feBlend in="D_GREEN" in2="RB" out="RGB" mode="multiply"></feBlend>
+        </filter>
+      </defs>
+    </svg>
+
     <main>
-      <section id="hero">
-        <Image
-          src={imageUrl}
-          width="200"
-          height="266"
-          alt=""
-          sizes="(max-width: 500px) 80vw, 400px"
-          widths={[200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800]}
-        />
-        <hgroup>
-          <h1>
-            {title}
-          </h1>
-          <p>{subtitle}</p>
-        </hgroup>
-        <!-- TODO: add alt -->
-        <!-- <section id="links">
-				<a class="button" href="https://docs.astro.build">Book me</a>
-      </section> -->
+      <section class="information">
+        <h2 style="color: gray">Information</h2>
+        {
+          information.map((info: any) => {
+            switch (info.__typename) {
+              case "Tekst":
+                const text = mapTextComponent(info);
+                return (
+                  <span class:list={text.classList} set:html={text.text} />
+                );
+              case "Spotify":
+                return <a href={info.spotify.url}> {info.spotify.url} </a>;
+              case "Image":
+                return (
+                  <img src={info.image.url} alt="" width="1536" height="2048" />
+                );
+            }
+          })
+        }
+      </section>
+      <section class="inspiration">
+        <h2 style="color: gray">Inspiration</h2>
+        {
+          inspiration.map((inspi: any) => {
+            switch (inspi.__typename) {
+            }
+          })
+        }
       </section>
     </main>
   </div>
 </Layout>
 <style>
+  html {
+    /* blue color pallate */
+    --blue-200: oklch(25% 0.2 200);
+
+    /* green color pallate */
+    --green-200: oklch(90% 0.1 150);
+
+    /* white color */
+    --white: oklch(100% 0.1 0);
+
+    /* named tokens */
+    --information-background-color: var(--blue-200);
+    --inspiration-background-color: var(--green-200);
+
+    --text-color: var(--white);
+  }
+
   img {
-    width: 400px;
+    max-width: 100%;
     height: auto;
-    aspect-ratio: 3/4;
-    border-radius: 8px;
+  }
+
+  :global(p) {
+    margin-block: 1em;
+    line-height: 1.5;
+    font-size: 1.5rem;
+  }
+
+  :global(.distorted > p) {
+    filter: url(#n1);
   }
 
   #background {
@@ -138,160 +235,45 @@ const subtitle = data.Homepage.subtitle;
   }
 
   #container {
-    font-family:
-      Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial,
-      sans-serif;
+    font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
+      Arial, sans-serif;
     height: 100%;
   }
 
   main {
-    height: 100%;
-  }
-
-  #hero {
+    min-height: 100%;
     display: flex;
-    padding: 16px;
-    gap: 4rem;
+    scrollbar-width: thin;
   }
 
-  hgroup h1 {
-    font-size: 5vw;
-    margin: 0;
+  main > section {
+    padding: 2rem;
+    height: 100vh;
+    height: 100dvh;
+    width: 50%;
+    flex-basis: 500px;
+    flex-grow: 1;
+    flex-shrink: 0;
+    overflow: scroll;
   }
 
-  hgroup p {
-    font-size: 2vw;
+  .information {
+    background-color: var(--information-background-color);
+
+    color: var(--text-color);
   }
 
-  #links {
-    display: flex;
-    gap: 16px;
-  }
-
-  #links a {
-    display: flex;
-    align-items: center;
-    padding: 10px 12px;
-    color: #111827;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  #links a:hover {
-    color: rgb(78, 80, 86);
-  }
-
-  #links a svg {
-    height: 1em;
-    margin-left: 8px;
-  }
-
-  #links a.button {
-    color: white;
-    background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-      inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-    border-radius: 10px;
-  }
-
-  #links a.button:hover {
-    color: rgb(230, 230, 230);
-    box-shadow: none;
-  }
-
-  pre {
-    font-family:
-      ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
-      "DejaVu Sans Mono", monospace;
-    font-weight: normal;
-    background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin: 0;
+  .inspiration {
+    background-color: var(--inspiration-background-color);
   }
 
   h2 {
     margin: 0 0 1em;
     font-weight: normal;
     color: #111827;
-    font-size: 20px;
+    font-size: 2rem;
   }
-
-  p {
-    color: #4b5563;
-    font-size: 16px;
-    line-height: 24px;
-    letter-spacing: -0.006em;
-    margin: 0;
-  }
-
-  code {
-    display: inline-block;
-    background:
-      linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-      linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 6px 8px;
-  }
-
-  .box {
-    padding: 16px;
-    background: rgba(255, 255, 255, 1);
-    border-radius: 16px;
-    border: 1px solid white;
-  }
-
-  #news {
-    position: absolute;
-    bottom: 16px;
-    right: 16px;
-    max-width: 300px;
-    text-decoration: none;
-    transition: background 0.2s;
-    backdrop-filter: blur(50px);
-  }
-
-  #news:hover {
-    background: rgba(255, 255, 255, 0.55);
-  }
-
-  @media screen and (max-height: 368px) {
-    #news {
-      display: none;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    #container {
-      display: flex;
-      flex-direction: column;
-    }
-
-    #hero {
-      display: block;
-      padding-top: 10%;
-    }
-
-    #links {
-      flex-wrap: wrap;
-    }
-
-    #links a.button {
-      padding: 14px 18px;
-    }
-
-    #news {
-      right: 16px;
-      left: 16px;
-      bottom: 2.5rem;
-      max-width: 100%;
-    }
-
-    h1 {
-      line-height: 1.5;
-    }
+  * {
+    box-sizing: border-box;
   }
 </style>
