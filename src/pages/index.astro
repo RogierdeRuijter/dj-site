@@ -217,7 +217,13 @@ const inspiration = data.Homepage.inspiration;
   :global(p) {
     margin-block: 1em;
     line-height: 1.5;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    :global(p) {
+      font-size: 1.5rem;
+    }
   }
 
   :global(.distorted > p) {
