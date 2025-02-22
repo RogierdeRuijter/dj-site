@@ -137,9 +137,7 @@ const inspiration = homepageData.Homepage.inspiration;
                               )}
                             </time>
                             <time datetime={event.datetime.from}>
-                              {new Date(
-                                event.datetime.from,
-                              ).toLocaleTimeString()}
+                              {new Date(event.datetime.from).toUTCString().slice(17, 22)}
                             </time>
                             <span>{event.location}</span>
                             <a href={event.ticket_url} style="color: white;">
@@ -234,9 +232,8 @@ const inspiration = homepageData.Homepage.inspiration;
   }
 
   #container {
-    font-family:
-      Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial,
-      sans-serif;
+    font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
+      Arial, sans-serif;
     height: 100%;
   }
 
