@@ -1,9 +1,9 @@
-import { describe, it } from 'node:test';
-import { mapTextComponent } from './mapTextComponent.ts';
-import { deepEqual } from 'node:assert/strict';
+import { describe, it } from "node:test";
+import { mapTextComponent } from "./mapTextComponent.ts";
+import { deepEqual } from "node:assert/strict";
 
 describe("mapTextComponent", () => {
-  it("should map distored to classList if it set to true", () =>{
+  it("should map distored to classList if it set to true", () => {
     const textComponent = {
       distorted: true,
       text: "mijn text",
@@ -19,7 +19,7 @@ describe("mapTextComponent", () => {
     deepEqual(actual, expected);
   });
 
-  it("should map to an empty list if distorted is false", () =>{
+  it("should map to an empty list if distorted is false", () => {
     const textComponent = {
       distorted: false,
       text: "mijn text",

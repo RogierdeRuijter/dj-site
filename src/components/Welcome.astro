@@ -1,6 +1,6 @@
 ---
-import background from '../assets/background.svg';
-import { Image } from 'astro:assets';
+import background from "../assets/background.svg";
+import { Image } from "astro:assets";
 
 const url = import.meta.env.PREPR_URL_PREVIEW ?? import.meta.env.PREPR_URL;
 
@@ -18,42 +18,53 @@ const query = `
   }
 `;
 
-const response = await fetch(
-  url,
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      query
-    })
-  })
+const response = await fetch(url, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    query,
+  }),
+});
 
 const { data } = await response.json();
 
 const title = data.Homepage.title;
 const imageUrl = data.Homepage.hero.url;
 const subtitle = data.Homepage.subtitle;
-
 ---
 
 <filter id="n1">
-    <feTurbulence type="fractalNoise" baseFrequency="0.001 0.001" numOctaves="5" result="NOISE" seed="172312"></feTurbulence>
-    <feGaussianBlur in="SourceGraphic" result="BLURRED" stdDeviation="0"></feGaussianBlur>
-    <feDisplacementMap id="displacer" in2="NOISE" in="BLURRED" scale="15" xChannelSelector="R" yChannelSelector="R" result="DISPLACED"></feDisplacementMap>
+  <feTurbulence
+    type="fractalNoise"
+    baseFrequency="0.001 0.001"
+    numOctaves="5"
+    result="NOISE"
+    seed="172312"></feTurbulence>
+  <feGaussianBlur in="SourceGraphic" result="BLURRED" stdDeviation="0"
+  ></feGaussianBlur>
+  <feDisplacementMap
+    id="displacer"
+    in2="NOISE"
+    in="BLURRED"
+    scale="15"
+    xChannelSelector="R"
+    yChannelSelector="R"
+    result="DISPLACED"></feDisplacementMap>
 </filter>
 <div id="container">
-	<img id="background" src={background.src} alt="" fetchpriority="high" />
-	<main>
-		<section id="hero">
-      <Image 
-        src={imageUrl} 
-        width="200" 
-        height="266" 
-        alt="" 
+  <img id="background" src={background.src} alt="" fetchpriority="high" />
+  <main>
+    <section id="hero">
+      <Image
+        src={imageUrl}
+        width="200"
+        height="266"
+        alt=""
         sizes="(max-width: 500px) 80vw, 400px"
-        widths={[200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800]} />
+        widths={[200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800]}
+      />
       <hgroup>
         <h1>
           {title}
@@ -64,9 +75,8 @@ const subtitle = data.Homepage.subtitle;
       <!-- <section id="links">
 				<a class="button" href="https://docs.astro.build">Book me</a>
       </section> -->
-		</section>
-	</main>
-
+    </section>
+  </main>
 </div>
 
 <style>
@@ -77,170 +87,171 @@ const subtitle = data.Homepage.subtitle;
     border-radius: 8px;
   }
 
-	#background {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		z-index: -1;
-		filter: blur(100px);
-	}
+  #background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    filter: blur(100px);
+  }
 
-	#container {
-		font-family: Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
-		height: 100%;
-	}
+  #container {
+    font-family:
+      Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial,
+      sans-serif;
+    height: 100%;
+  }
 
-	main {
-		height: 100%;
-	}
+  main {
+    height: 100%;
+  }
 
-	#hero {
-		display: flex;
-		padding: 16px;
+  #hero {
+    display: flex;
+    padding: 16px;
     gap: 4rem;
-	}
+  }
 
   hgroup h1 {
-		font-size: 5vw;
-		margin: 0;
-	}
+    font-size: 5vw;
+    margin: 0;
+  }
 
   hgroup p {
     font-size: 2vw;
   }
 
+  #links {
+    display: flex;
+    gap: 16px;
+  }
 
+  #links a {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    color: #111827;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
 
-	#links {
-		display: flex;
-		gap: 16px;
-	}
+  #links a:hover {
+    color: rgb(78, 80, 86);
+  }
 
-	#links a {
-		display: flex;
-		align-items: center;
-		padding: 10px 12px;
-		color: #111827;
-		text-decoration: none;
-		transition: color 0.2s;
-	}
+  #links a svg {
+    height: 1em;
+    margin-left: 8px;
+  }
 
-	#links a:hover {
-		color: rgb(78, 80, 86);
-	}
+  #links a.button {
+    color: white;
+    background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.24);
+    border-radius: 10px;
+  }
 
-	#links a svg {
-		height: 1em;
-		margin-left: 8px;
-	}
+  #links a.button:hover {
+    color: rgb(230, 230, 230);
+    box-shadow: none;
+  }
 
-	#links a.button {
-		color: white;
-		background: linear-gradient(83.21deg, #3245ff 0%, #bc52ee 100%);
-		box-shadow:
-			inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-			inset 0 -2px 0 rgba(0, 0, 0, 0.24);
-		border-radius: 10px;
-	}
+  pre {
+    font-family:
+      ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas,
+      "DejaVu Sans Mono", monospace;
+    font-weight: normal;
+    background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+  }
 
-	#links a.button:hover {
-		color: rgb(230, 230, 230);
-		box-shadow: none;
-	}
+  h2 {
+    margin: 0 0 1em;
+    font-weight: normal;
+    color: #111827;
+    font-size: 20px;
+  }
 
-	pre {
-		font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,
-			'DejaVu Sans Mono', monospace;
-		font-weight: normal;
-		background: linear-gradient(14deg, #d83333 0%, #f041ff 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-		margin: 0;
-	}
+  p {
+    color: #4b5563;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.006em;
+    margin: 0;
+  }
 
-	h2 {
-		margin: 0 0 1em;
-		font-weight: normal;
-		color: #111827;
-		font-size: 20px;
-	}
+  code {
+    display: inline-block;
+    background:
+      linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
+      linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 6px 8px;
+  }
 
-	p {
-		color: #4b5563;
-		font-size: 16px;
-		line-height: 24px;
-		letter-spacing: -0.006em;
-		margin: 0;
-	}
+  .box {
+    padding: 16px;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 16px;
+    border: 1px solid white;
+  }
 
-	code {
-		display: inline-block;
-		background:
-			linear-gradient(66.77deg, #f3cddd 0%, #f5cee7 100%) padding-box,
-			linear-gradient(155deg, #d83333 0%, #f041ff 18%, #f5cee7 45%) border-box;
-		border-radius: 8px;
-		border: 1px solid transparent;
-		padding: 6px 8px;
-	}
+  #news {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    max-width: 300px;
+    text-decoration: none;
+    transition: background 0.2s;
+    backdrop-filter: blur(50px);
+  }
 
-	.box {
-		padding: 16px;
-		background: rgba(255, 255, 255, 1);
-		border-radius: 16px;
-		border: 1px solid white;
-	}
+  #news:hover {
+    background: rgba(255, 255, 255, 0.55);
+  }
 
-	#news {
-		position: absolute;
-		bottom: 16px;
-		right: 16px;
-		max-width: 300px;
-		text-decoration: none;
-		transition: background 0.2s;
-		backdrop-filter: blur(50px);
-	}
+  @media screen and (max-height: 368px) {
+    #news {
+      display: none;
+    }
+  }
 
-	#news:hover {
-		background: rgba(255, 255, 255, 0.55);
-	}
+  @media screen and (max-width: 768px) {
+    #container {
+      display: flex;
+      flex-direction: column;
+    }
 
-	@media screen and (max-height: 368px) {
-		#news {
-			display: none;
-		}
-	}
+    #hero {
+      display: block;
+      padding-top: 10%;
+    }
 
-	@media screen and (max-width: 768px) {
-		#container {
-			display: flex;
-			flex-direction: column;
-		}
+    #links {
+      flex-wrap: wrap;
+    }
 
-		#hero {
-			display: block;
-			padding-top: 10%;
-		}
+    #links a.button {
+      padding: 14px 18px;
+    }
 
-		#links {
-			flex-wrap: wrap;
-		}
+    #news {
+      right: 16px;
+      left: 16px;
+      bottom: 2.5rem;
+      max-width: 100%;
+    }
 
-		#links a.button {
-			padding: 14px 18px;
-		}
-
-		#news {
-			right: 16px;
-			left: 16px;
-			bottom: 2.5rem;
-			max-width: 100%;
-		}
-
-		h1 {
-			line-height: 1.5;
-		}
-	}
+    h1 {
+      line-height: 1.5;
+    }
+  }
 </style>

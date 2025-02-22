@@ -9,7 +9,7 @@ interface ReturnType {
 }
 
 export const mapTextComponent = (textComponent: InputType): ReturnType => {
-  const { distorted,  text } = textComponent;
+  const { distorted, text } = textComponent;
 
   return {
     classList: distorted ? ["distorted"] : [],

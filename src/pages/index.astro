@@ -121,7 +121,6 @@ const inspiration = homepageData.Homepage.inspiration;
                       <span>Datum</span>
                       <span>Tijd</span>
                       <span>Locatie</span>
-                      <!-- TODO: remove this span and use css to move this on one row -->
                       <span />
                       {info.agenda.map((event: any) => {
                         return (
@@ -143,7 +142,9 @@ const inspiration = homepageData.Homepage.inspiration;
                               ).toLocaleTimeString()}
                             </time>
                             <span>{event.location}</span>
-                            <a href={event.ticket_url} style="color: white;">Tickets</a>
+                            <a href={event.ticket_url} style="color: white;">
+                              Tickets
+                            </a>
                           </>
                         );
                       })}
@@ -233,8 +234,9 @@ const inspiration = homepageData.Homepage.inspiration;
   }
 
   #container {
-    font-family: Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans",
-      Arial, sans-serif;
+    font-family:
+      Inter, Roboto, "Helvetica Neue", "Arial Nova", "Nimbus Sans", Arial,
+      sans-serif;
     height: 100%;
   }
 
@@ -269,7 +271,6 @@ const inspiration = homepageData.Homepage.inspiration;
   h2 {
     margin: 0 0 1em;
     font-weight: normal;
-    color: #111827;
     font-size: 2rem;
   }
 
