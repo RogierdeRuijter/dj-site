@@ -1,67 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { mapTextComponent } from "../functions/mapTextComponent";
+import { HomepageQuery } from "../utils/queries/homepageQuery";
+import { fetchPrepr } from "../functions/fetchPrepr";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const homepageData = await fetchPrepr(HomepageQuery);
 
-const url = import.meta.env.PREPR_URL_PREVIEW ?? import.meta.env.PREPR_URL;
+const information = homepageData.Homepage.information;
+const inspiration = homepageData.Homepage.inspiration;
 
-const query = `
-  query {
-    Homepage { 
-      _id
-      information { 
-        __typename
-      ... on Spotify {
-        _id
-        spotify {
-          _id
-          url
-        }
-      }
-      ... on Soundcloud {
-        _id
-        soundcloud {
-          _id
-          url
-        }
-      }
-      ... on Tekst {
-        _id
-        distorted
-        text
-      }
-      ... on Image {
-        _id
-        image {
-          url
-          width
-          height
-        }
-      }
-    }
-      inspiration { 
-        __typename
-      }
-    }
-  }
-`;
-
-const response = await fetch(url, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    query,
-  }),
-});
-
-const { data } = await response.json();
-
-const information = data.Homepage.information;
-const inspiration = data.Homepage.inspiration;
+// console.dir(information, { depth: null });
 ---
 
 <Layout>
@@ -164,6 +112,44 @@ const inspiration = data.Homepage.inspiration;
         {
           information.map((info: any) => {
             switch (info.__typename) {
+              case "Agenda":
+                return (
+                  <>
+                    <h2>Agenda</h2>
+                    <div class="agenda">
+                      <span>Feest</span>
+                      <span>Datum</span>
+                      <span>Tijd</span>
+                      <span>Locatie</span>
+                      <!-- TODO: remove this span and use css to move this on one row -->
+                      <span />
+                      {info.agenda.map((event: any) => {
+                        return (
+                          <>
+                            <span>{event.brand_name}</span>
+                            <time datetime={event.datetime.from}>
+                              {new Date(event.datetime.from).toLocaleDateString(
+                                "nl-NL",
+                                {
+                                  weekday: "long",
+                                  month: "long",
+                                  day: "numeric",
+                                },
+                              )}
+                            </time>
+                            <time datetime={event.datetime.from}>
+                              {new Date(
+                                event.datetime.from,
+                              ).toLocaleTimeString()}
+                            </time>
+                            <span>{event.location}</span>
+                            <a href={event.ticket_url} style="color: white;">Tickets</a>
+                          </>
+                        );
+                      })}
+                    </div>
+                  </>
+                );
               case "Tekst":
                 const text = mapTextComponent(info);
                 return (
@@ -228,6 +214,12 @@ const inspiration = data.Homepage.inspiration;
 
   :global(.distorted > p) {
     filter: url(#n1);
+  }
+
+  .agenda {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
   }
 
   #background {

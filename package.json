@@ -19,9 +19,11 @@
     "@astrojs/netlify": "^6.1.0",
     "@astrojs/node": "^9.0.2",
     "astro": "^5.1.8",
-    "gql": "^1.1.2"
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
+    "@graphql-codegen/typed-document-node": "^5.0.14",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@types/node": "^22.13.4",
     "prettier": "^3.5.1",
     "prettier-plugin-astro": "^0.14.1"
