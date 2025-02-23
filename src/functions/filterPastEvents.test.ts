@@ -44,7 +44,7 @@ describe("filterPastEvents", () => {
     deepEqual(actual, expected);
   });
 
-  it("should leave the agenda item in there for 5 days in the future", () => {
+  it("should leave the agenda item is 2 days in the future", () => {
     const eventDate = new Date("2025-02-04T20:00:00+00:00").getTime();
     const twoDays = 2 * 24 * 60 * 60 * 1000;
 
