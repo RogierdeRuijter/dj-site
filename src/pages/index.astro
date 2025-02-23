@@ -3,13 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import { mapTextComponent } from "../functions/mapTextComponent";
 import { HomepageQuery } from "../utils/queries/homepageQuery";
 import { fetchPrepr } from "../functions/fetchPrepr";
+import { filterPastEvents } from "../functions/filterPastEvents";
 
 const homepageData = await fetchPrepr(HomepageQuery);
 
 const information = homepageData.Homepage.information;
 const inspiration = homepageData.Homepage.inspiration;
-
-// console.dir(information, { depth: null });
 ---
 
 <Layout>
@@ -122,30 +121,33 @@ const inspiration = homepageData.Homepage.inspiration;
                       <span>Tijd</span>
                       <span>Locatie</span>
                       <span />
-                      {info.agenda.map((event: any) => {
-                        return (
-                          <>
-                            <span>{event.brand_name}</span>
-                            <time datetime={event.datetime.from}>
-                              {new Date(event.datetime.from).toLocaleDateString(
-                                "nl-NL",
-                                {
+                      {info.agenda
+                        .filter(filterPastEvents)
+                        .map((event: any) => {
+                          return (
+                            <>
+                              <span>{event.brand_name}</span>
+                              <time datetime={event.datetime.from}>
+                                {new Date(
+                                  event.datetime.from,
+                                ).toLocaleDateString("nl-NL", {
                                   weekday: "long",
                                   month: "long",
                                   day: "numeric",
-                                },
-                              )}
-                            </time>
-                            <time datetime={event.datetime.from}>
-                              {new Date(event.datetime.from).toUTCString().slice(17, 22)}
-                            </time>
-                            <span>{event.location}</span>
-                            <a href={event.ticket_url} style="color: white;">
-                              Tickets
-                            </a>
-                          </>
-                        );
-                      })}
+                                })}
+                              </time>
+                              <time datetime={event.datetime.from}>
+                                {new Date(event.datetime.from)
+                                  .toUTCString()
+                                  .slice(17, 22)}
+                              </time>
+                              <span>{event.location}</span>
+                              <a href={event.ticket_url} style="color: white;">
+                                Tickets
+                              </a>
+                            </>
+                          );
+                        })}
                     </div>
                   </>
                 );
