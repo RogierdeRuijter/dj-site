@@ -12,7 +12,7 @@ interface Event {
  *
  * @returns {boolean} - True if the event is more than 5 days in the future, false otherwise.
  */
-export const filterPastEvents = (event: Event) => {
+export const filterPastEvents = (event: Event): boolean => {
   const until = new Date(event.datetime.until);
 
   return until.valueOf() > new Date().valueOf() - fiveDays;
