@@ -129,43 +129,45 @@ const inspiration = homepageData.Homepage.inspiration;
             switch (info.__typename) {
               case "Agenda":
                 return (
-                  <>
+                  <div>
                     <h2>Agenda</h2>
                     <div class="agenda">
                       <span>Feest</span>
                       <span>Datum</span>
-                      <span>Tijd</span>
                       <span>Locatie</span>
                       <span />
                       {info.agenda
                         .filter(filterPastEvents)
+                        .sort((a: any, b: any) => {
+                          return (
+                            new Date(a.date).valueOf() -
+                            new Date(b.date).valueOf()
+                          );
+                        })
                         .map((event: any) => {
                           return (
                             <>
                               <span>{event.brand_name}</span>
-                              <time datetime={event.datetime.from}>
-                                {new Date(
-                                  event.datetime.from,
-                                ).toLocaleDateString("nl-NL", {
-                                  weekday: "long",
-                                  month: "long",
-                                  day: "numeric",
-                                })}
-                              </time>
-                              <time datetime={event.datetime.from}>
-                                {new Date(event.datetime.from)
-                                  .toUTCString()
-                                  .slice(17, 22)}
+                              <time datetime={event.date}>
+                                {new Date(event.date).toLocaleDateString(
+                                  "nl-NL",
+                                  {
+                                    weekday: "short",
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                  },
+                                )}
                               </time>
                               <span>{event.location}</span>
                               <a href={event.ticket_url} style="color: white;">
-                                Tickets
+                                {event.label}
                               </a>
                             </>
                           );
                         })}
                     </div>
-                  </>
+                  </div>
                 );
               case "Tekst":
                 const text = mapTextComponent(info);
@@ -222,6 +224,9 @@ const inspiration = homepageData.Homepage.inspiration;
 
   .information {
     --background-color: var(--green-200);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
 
   @font-face {
@@ -265,7 +270,7 @@ const inspiration = homepageData.Homepage.inspiration;
 
   .agenda {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
   }
 
@@ -303,7 +308,8 @@ const inspiration = homepageData.Homepage.inspiration;
     overflow: scroll;
   }
 
-  .information, .inspiration {
+  .information,
+  .inspiration {
     background-color: var(--background-color);
     color: var(--text-color);
   }
@@ -316,5 +322,9 @@ const inspiration = homepageData.Homepage.inspiration;
 
   :global(*) {
     box-sizing: border-box;
+  }
+
+  :global(p) {
+    margin: 0;
   }
 </style>

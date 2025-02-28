@@ -35,13 +35,11 @@ export const HomepageQuery = gql`
         }
         ... on Agenda {
           agenda {
-            datetime {
-              from
-              until
-            }
+            date 
             brand_name
             location
             ticket_url
+            label
           }
         }
       }

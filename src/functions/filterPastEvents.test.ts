@@ -13,10 +13,7 @@ describe("filterPastEvents", () => {
     mock.timers.setTime(currentDate);
 
     const input = {
-      datetime: {
-        from: "2025-02-01T20:00:00+00:00",
-        until: "2025-02-01T23:30:00+00:00",
-      },
+      date: "2025-02-01",
     };
 
     const actual = filterPastEvents(input);
@@ -31,10 +28,7 @@ describe("filterPastEvents", () => {
     mock.timers.setTime(currentDate);
 
     const input = {
-      datetime: {
-        from: "2025-02-01T20:00:00+00:00",
-        until: "2025-02-01T23:30:00+00:00",
-      },
+      date: "2025-02-01T20:00:00+00:00",
     };
 
     const actual = filterPastEvents(input);
@@ -51,10 +45,7 @@ describe("filterPastEvents", () => {
     mock.timers.setTime(eventDate - twoDays);
 
     const input = {
-      datetime: {
-        from: "2025-02-01T20:00:00+00:00",
-        until: "2025-02-01T23:30:00+00:00",
-      },
+      date: "2025-02-01",
     };
 
     const actual = filterPastEvents(input);
