@@ -48,6 +48,10 @@ export const HomepageQuery = gql`
       inspiration {
         __typename
       }
+      information_background_color
+      information_text_color
+      inspiration_background_color
+      inspiration_text_color
     }
   }
 `;

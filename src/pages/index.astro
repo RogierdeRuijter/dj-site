@@ -7,6 +7,16 @@ import { filterPastEvents } from "../functions/filterPastEvents";
 
 const homepageData = await fetchPrepr(HomepageQuery);
 
+const informationColor = {
+  background: homepageData.Homepage.information_background_color,
+  text: homepageData.Homepage.information_text_color,
+};
+
+const inspirationColor = {
+  background: homepageData.Homepage.inspiration_background_color,
+  text: homepageData.Homepage.inspiration_text_color,
+};
+
 const information = homepageData.Homepage.information;
 const inspiration = homepageData.Homepage.inspiration;
 ---
@@ -106,8 +116,14 @@ const inspiration = homepageData.Homepage.inspiration;
     </svg>
 
     <main>
-      <section class="information">
-        <h2 style="color: gray">Information</h2>
+      <section
+        class="information"
+        style={{
+          "--text-color": informationColor.text,
+          "--background-color": informationColor.background,
+        }}
+      >
+        <h2 class="title">Katja</h2>
         {
           information.map((info: any) => {
             switch (info.__typename) {
@@ -166,8 +182,14 @@ const inspiration = homepageData.Homepage.inspiration;
           })
         }
       </section>
-      <section class="inspiration">
-        <h2 style="color: gray">Inspiration</h2>
+      <section
+        class="inspiration"
+        style={{
+          "--text-color": inspirationColor.text,
+          "--background-color": inspirationColor.background,
+        }}
+      >
+        <h2 class="title">Isabella</h2>
         {
           inspiration.map((inspi: any) => {
             switch (inspi.__typename) {
@@ -190,15 +212,39 @@ const inspiration = homepageData.Homepage.inspiration;
     --white: oklch(100% 0.075 0);
 
     /* named tokens */
-    --information-background-color: var(--blue-200);
-    --inspiration-background-color: var(--green-200);
 
     --text-color: var(--white);
+  }
+
+  .inspiration {
+    --background-color: var(--blue-200);
+  }
+
+  .information {
+    --background-color: var(--green-200);
+  }
+
+  @font-face {
+    font-family: "Staatliches";
+    src: url("/public/Staatliches-Regular.ttf") format("truetype");
   }
 
   img {
     max-width: 100%;
     height: auto;
+  }
+
+  .title {
+    filter: url(#n1);
+    font-family: "Staatliches", sans-serif;
+    letter-spacing: 0.12em;
+    font-size: 6rem;
+    text-transform: uppercase;
+    margin-bottom: 0.25em;
+  }
+
+  .information > .title {
+    text-align: right;
   }
 
   :global(p) {
@@ -257,14 +303,9 @@ const inspiration = homepageData.Homepage.inspiration;
     overflow: scroll;
   }
 
-  .information {
-    background-color: var(--information-background-color);
-
+  .information, .inspiration {
+    background-color: var(--background-color);
     color: var(--text-color);
-  }
-
-  .inspiration {
-    background-color: var(--inspiration-background-color);
   }
 
   h2 {
