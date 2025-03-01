@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Agenda from "../components/Agenda.astro";
 import { mapTextComponent } from "../functions/mapTextComponent";
 import { HomepageQuery } from "../utils/queries/homepageQuery";
 import { fetchPrepr } from "../functions/fetchPrepr";
-import { filterPastEvents } from "../functions/filterPastEvents";
 
 const homepageData = await fetchPrepr(HomepageQuery);
 
@@ -128,47 +128,7 @@ const inspiration = homepageData.Homepage.inspiration;
           information.map((info: any) => {
             switch (info.__typename) {
               case "Agenda":
-                return (
-                  <div>
-                    <h2>Agenda</h2>
-                    <div class="agenda">
-                      <span>Feest</span>
-                      <span>Datum</span>
-                      <span>Locatie</span>
-                      <span />
-                      {info.agenda
-                        .filter(filterPastEvents)
-                        .sort((a: any, b: any) => {
-                          return (
-                            new Date(a.date).valueOf() -
-                            new Date(b.date).valueOf()
-                          );
-                        })
-                        .map((event: any) => {
-                          return (
-                            <>
-                              <span>{event.brand_name}</span>
-                              <time datetime={event.date}>
-                                {new Date(event.date).toLocaleDateString(
-                                  "nl-NL",
-                                  {
-                                    weekday: "short",
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric",
-                                  },
-                                )}
-                              </time>
-                              <span>{event.location}</span>
-                              <a href={event.ticket_url} style="color: white;">
-                                {event.label}
-                              </a>
-                            </>
-                          );
-                        })}
-                    </div>
-                  </div>
-                );
+                return <Agenda agenda={info.agenda} />;
               case "Tekst":
                 const text = mapTextComponent(info);
                 return (
@@ -266,12 +226,6 @@ const inspiration = homepageData.Homepage.inspiration;
 
   :global(.distorted > p) {
     filter: url(#n1);
-  }
-
-  .agenda {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
   }
 
   #background {
