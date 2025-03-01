@@ -7,8 +7,8 @@ const { agenda } = Astro.props;
 ---
 
 <div>
-  <h2>Agenda</h2>
-  <div class="Agenda">
+  <h2 class="Agenda-title">Agenda</h2>
+  <div>
     {
       agenda
         .filter(filterPastEvents)
@@ -43,15 +43,12 @@ const { agenda } = Astro.props;
     display: grid;
     grid-template-columns: 1.618fr 3fr 1fr;
     gap: 1rem;
-    /* --border-color: rgb(226, 232, 240);
-    border-block-end: 0.5px solid var(--border-color); */
     padding-block: 1rem;
     font-size: 1rem;
     position: relative;
   }
 
   .Agenda-item:after {
-    /* border-block-end: none; */
     content: "";
     position: absolute;
     bottom: 0px;
