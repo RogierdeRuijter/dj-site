@@ -1,26 +1,26 @@
-import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
+import type { TypedDocumentString } from '../graphql/graphql'
 
 const url = import.meta.env.PREPR_URL_PREVIEW ?? import.meta.env.PREPR_URL;
 
-// TODO: can we type the query string further?
-// TODO: can we type the response further?
-export const fetchPrepr = async (query: TypedDocumentNode): Promise<any> => {
+export async function execute<TResult, TVariables>(
+  query: TypedDocumentString<TResult, TVariables>,
+  ...[variables]: TVariables extends Record<string, never> ? [] : [TVariables]
+) {
   const response = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
+      Accept: 'application/graphql-response+json'
     },
     body: JSON.stringify({
-      query: query.loc?.source.body,
-    }),
-  });
-
-  const { data, errors } = await response.json();
-
-  if (errors) {
-    console.dir(errors, { depth: null });
-    throw new Error("Failed to fetch data from Prepr");
+      query,
+      variables
+    })
+  })
+ 
+  if (!response.ok) {
+    throw new Error('Network response was not ok')
   }
-
-  return data;
-};
+ 
+  return (await response.json()).data as TResult
+}

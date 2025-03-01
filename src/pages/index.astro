@@ -2,23 +2,23 @@
 import Layout from "../layouts/Layout.astro";
 import Agenda from "../components/Agenda.astro";
 import { mapTextComponent } from "../functions/mapTextComponent";
-import { HomepageQuery } from "../utils/queries/homepageQuery";
-import { fetchPrepr } from "../functions/fetchPrepr";
+import { HomepageDocument } from "../graphql/graphql";
+import { execute } from "../functions/fetchPrepr";
 
-const homepageData = await fetchPrepr(HomepageQuery);
+const homepageData = await execute(HomepageDocument);
 
 const informationColor = {
-  background: homepageData.Homepage.information_background_color,
-  text: homepageData.Homepage.information_text_color,
+  background: homepageData.Homepage?.information_background_color,
+  text: homepageData.Homepage?.information_text_color,
 };
 
 const inspirationColor = {
-  background: homepageData.Homepage.inspiration_background_color,
-  text: homepageData.Homepage.inspiration_text_color,
+  background: homepageData.Homepage?.inspiration_background_color,
+  text: homepageData.Homepage?.inspiration_text_color,
 };
 
-const information = homepageData.Homepage.information;
-const inspiration = homepageData.Homepage.inspiration;
+const information = homepageData.Homepage?.information;
+const inspiration = homepageData.Homepage?.inspiration;
 ---
 
 <Layout>
@@ -125,9 +125,10 @@ const inspiration = homepageData.Homepage.inspiration;
       >
         <h2 class="title">Katja</h2>
         {
-          information.map((info: any) => {
+          information?.map((info) => {
             switch (info.__typename) {
               case "Agenda":
+                console.log("Agenda");
                 return <Agenda agenda={info.agenda} />;
               case "Tekst":
                 const text = mapTextComponent(info);
@@ -135,10 +136,15 @@ const inspiration = homepageData.Homepage.inspiration;
                   <span class:list={text.classList} set:html={text.text} />
                 );
               case "Spotify":
-                return <a href={info.spotify.url}> {info.spotify.url} </a>;
+                return <a href={info.spotify?.url}> {info.spotify?.url} </a>;
               case "Image":
                 return (
-                  <img src={info.image.url} alt="" width="1536" height="2048" />
+                  <img
+                    src={info.image?.url}
+                    alt=""
+                    width="1536"
+                    height="2048"
+                  />
                 );
             }
           })
@@ -153,7 +159,7 @@ const inspiration = homepageData.Homepage.inspiration;
       >
         <h2 class="title">Isabella</h2>
         {
-          inspiration.map((inspi: any) => {
+          inspiration?.map((inspi: any) => {
             switch (inspi.__typename) {
             }
           })

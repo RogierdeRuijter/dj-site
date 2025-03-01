@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "dev:netlify": "astro dev --config astro.config.netlify.mjs",
     "dev:node": "astro dev --config astro.config.node.mjs",
+    "codegen": "graphql-codegen --config codegen.ts",
     "build": "astro build",
     "build:netlify": "astro build --config astro.config.netlify.mjs",
     "build:node": "astro build --config astro.config.node.mjs",
@@ -19,13 +20,20 @@
     "@astrojs/netlify": "^6.1.0",
     "@astrojs/node": "^9.0.2",
     "astro": "^5.1.8",
+    "dotenv": "^16.4.7",
+    "graphql": "^16.10.0",
     "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
+    "@0no-co/graphqlsp": "^1.12.16",
+    "@graphql-codegen/cli": "^5.0.5",
+    "@graphql-codegen/schema-ast": "^4.1.0",
     "@graphql-codegen/typed-document-node": "^5.0.14",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@parcel/watcher": "^2.5.1",
     "@types/node": "^22.13.4",
     "prettier": "^3.5.1",
-    "prettier-plugin-astro": "^0.14.1"
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^5.8.2"
   }
 }

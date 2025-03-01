@@ -1,7 +1,7 @@
-import gql from "graphql-tag";
+import { graphql } from "../../graphql";
 
-export const HomepageQuery = gql`
-  query {
+export const Homepage = graphql(`
+  query Homepage {
     Homepage {
       _id
       information {
@@ -35,7 +35,7 @@ export const HomepageQuery = gql`
         }
         ... on Agenda {
           agenda {
-            date 
+            date
             brand_name
             location
             ticket_url
@@ -52,4 +52,4 @@ export const HomepageQuery = gql`
       inspiration_text_color
     }
   }
-`;
+`);

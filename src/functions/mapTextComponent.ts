@@ -1,14 +1,15 @@
-interface InputType {
-  distorted: boolean;
-  text: string;
-}
+import { StackItem } from "../types/stackItem";
 
 interface ReturnType {
   classList: string[];
   text: string;
 }
 
-export const mapTextComponent = (textComponent: InputType): ReturnType => {
+type TextComponent = NonNullable<
+  Extract<StackItem, { __typename: "Tekst" }>
+>;
+
+export const mapTextComponent = (textComponent: TextComponent): ReturnType => {
   const { distorted, text } = textComponent;
 
   return {

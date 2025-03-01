@@ -1,0 +1,376 @@
+schema {
+  query: Query
+}
+
+"""Single Agenda."""
+type Agenda implements Model {
+  """Count of bookmark events."""
+  _bookmarks: Int!
+  """The time the content item was changed."""
+  _changed_on: String!
+  _context: Context
+  """The time the content item was created."""
+  _created_on: String!
+  """Id of your Prepr Environment."""
+  _environment_id: String!
+  """Count of view events."""
+  _event(name: _Event! = View): Int!
+  """Unique identifier for each content item."""
+  _id: String!
+  _last_published_on: String
+  """Count of like events."""
+  _likes: Int!
+  _locale: String!
+  _locales: [String!]!
+  """This field returns all localizations for this content item."""
+  _localizations: [Agenda!]!
+  """The time for when the content item is or will be published."""
+  _publish_on: String
+  """Calculated time to read in minutes."""
+  _read_time: Int
+  """Unique within Type, string identifier for each content item."""
+  _slug: String
+  """Count of subscribe events."""
+  _subscribes: Int!
+  """Count of view events."""
+  _views: Int!
+  agenda(
+    """
+    If passed false, personalization is switched off and all possible variations are returned.
+    """
+    personalize: Boolean! = true
+    """Optional away to fetch the personalized result for the given segments."""
+    personalize_for_country: String
+    """Optional away to fetch the personalized result for the given segments."""
+    personalize_for_segments: [String!]
+  ): [Booking!]!
+  title: String
+}
+
+"""This union type holds all content models."""
+union AllModels = Agenda | Homepage
+
+"""Prepr Asset system model"""
+type Asset {
+  """Unique identifier for each asset."""
+  _id: String!
+  _locale: String!
+  """This field returns all localizations for this asset."""
+  _localizations: [Asset!]!
+  _type: String!
+  """Contextual field; alignment of the asset when used in a content item."""
+  alignment: AssetAlignment
+  author: String
+  """Contextual field; caption of the asset when used in a content item."""
+  caption: String
+  """Returns a cover image for audio/video files."""
+  cover(
+    animated: Boolean
+    """
+    Animated only: The time (in seconds) of the video timeline where the GIF ends. Defaults to 5 seconds after the start. Maximum total duration of GIF is limited to 10 seconds; minimum total duration of GIF is 250ms.
+    """
+    end: Float
+    """
+    How to fit a image within width + height. Valid values are preserve, stretch, crop, smartcrop, and pad.
+    """
+    fit_mode: String
+    """Flip the image left-right after performing all other transformations."""
+    flip_h: Boolean
+    """Flip the image top-bottom after performing all other transformations."""
+    flip_v: Boolean
+    """
+    Animated only: The frame rate of the generated GIF. Defaults to 15 fps. Max 30 fps.
+    """
+    fps: Int
+    """
+    The height in pixels of the image (in pixels). Defaults to the height of the original video.
+    """
+    height: Int
+    """
+    Rotate the image clockwise by the given number of degrees. Valid values are 90, 180, and 270.
+    """
+    rotate: Int
+    """
+    Animated only: The time (in seconds) of the video timeline where the animated GIF should begin. Defaults to 0.
+    """
+    start: Float
+    """
+    The time (in seconds) of the video timeline where the image should be pulled. Defaults to the middle of the original video.
+    """
+    time: Float
+    """
+    The width in pixels of the image (in pixels). Defaults to the width of the original video.
+    """
+    width: Int
+  ): String
+  description: String
+  duration: Int
+  height: Int
+  mime_type: String
+  name: String
+  original_name: String
+  """Mux Playback ID for Audio & Video assets."""
+  playback_id: String
+  url(
+    """
+    If true; returns the original uploaded file without any optimisation or compression.
+    """
+    as_file: Boolean
+    crop: String
+    """Image: Valid values are `jpg`, `png`, `webp`, `avif`."""
+    format: String
+    """Image: The height in pixels of the image (in pixels)."""
+    height: Int
+    """
+    If true; returns the file will open inline (changing the Content-Deposition response header).
+    """
+    inline: Boolean
+    preset: String
+    quality: Int
+    """For playback of specific MP4 static files."""
+    res: String
+    """Image: The width in pixels of the image (in pixels)."""
+    width: Int
+  ): String
+  width: Int
+}
+
+enum AssetAlignment {
+  center
+  left
+  right
+}
+
+"""Booking component."""
+type Booking implements Component {
+  _context: Context
+  _id: String!
+  brand_name: String
+  date: _Date
+  label: String
+  location: String
+  ticket_url: String
+}
+
+"""
+A component is a predefined set of fields that can be used in models. You can think of a component as a flexible, reusable template where you define fields once, and then fill them with different content every time you use it.
+"""
+interface Component {
+  _context: Context
+  """Unique identifier for each content component instance."""
+  _id: String!
+}
+
+type ContentItems {
+  items: [AllModels]
+  total: Int
+}
+
+enum ContentItemsSortInput {
+  changed_on
+  changed_on_DESC
+  created_on
+  created_on_DESC
+  """Sort content items by most viewed."""
+  popular
+  publish_on
+  publish_on_DESC
+}
+
+input ContentItemsWhereInput {
+  _channels_any: [String]
+  _customer_relation: CustomerRelationWhereInput
+  _id_any: [String]
+  _id_nany: [String]
+  _search: String
+  _search_options: SearchOptionsInput
+  _slug_any: [String!]
+  _stories_any: [String]
+  _stories_nany: [String]
+  _tags_all: [String]
+  _tags_any: [String]
+  _tags_has: Boolean
+  _tags_nany: [String]
+  _typename_any: [String]
+}
+
+type Context {
+  """
+  The unique identifier for an A/B test or personalization block used for analytics.
+  """
+  group_id: String
+  """
+  Returns the kind of personalized content: `PERSONALIZATION` | `AB_TEST`.
+  """
+  kind: String
+  segments: [String!]
+  """
+  A variant ID is a unique identifier assigned to each variant in an A/B test (A/B) or personalization and contains the segments it has been linked too.
+  """
+  variant_id: String
+  """
+  The unique identifier for an A/B test or personalization variant used for analytics.
+  """
+  variant_key: String
+}
+
+input CustomerRelationWhereInput {
+  event: _Event!
+  id: String
+  reference_id: String
+}
+
+"""Single Homepage."""
+type Homepage implements Model {
+  """Count of bookmark events."""
+  _bookmarks: Int!
+  """The time the content item was changed."""
+  _changed_on: String!
+  _context: Context
+  """The time the content item was created."""
+  _created_on: String!
+  """Id of your Prepr Environment."""
+  _environment_id: String!
+  """Count of view events."""
+  _event(name: _Event! = View): Int!
+  """Unique identifier for each content item."""
+  _id: String!
+  _last_published_on: String
+  """Count of like events."""
+  _likes: Int!
+  _locale: String!
+  _locales: [String!]!
+  """This field returns all localizations for this content item."""
+  _localizations: [Homepage!]!
+  """The time for when the content item is or will be published."""
+  _publish_on: String
+  """Calculated time to read in minutes."""
+  _read_time: Int
+  """Unique within Type, string identifier for each content item."""
+  _slug: String
+  """Count of subscribe events."""
+  _subscribes: Int!
+  """Count of view events."""
+  _views: Int!
+  information(
+    """
+    If passed false, personalization is switched off and all possible variations are returned.
+    """
+    personalize: Boolean! = true
+    """Optional away to fetch the personalized result for the given segments."""
+    personalize_for_country: String
+    """Optional away to fetch the personalized result for the given segments."""
+    personalize_for_segments: [String!]
+  ): [Homepage_Information!]!
+  information_background_color: String
+  information_text_color: String
+  inspiration(
+    """
+    If passed false, personalization is switched off and all possible variations are returned.
+    """
+    personalize: Boolean! = true
+    """Optional away to fetch the personalized result for the given segments."""
+    personalize_for_country: String
+    """Optional away to fetch the personalized result for the given segments."""
+    personalize_for_segments: [String!]
+  ): [Homepage_Inspiration!]!
+  inspiration_background_color: String
+  inspiration_text_color: String
+  title: String
+}
+
+union Homepage_Information = Agenda | Image | Soundcloud | Spotify | Tekst
+
+union Homepage_Inspiration = Image | Soundcloud | Spotify | Tekst
+
+"""Image component."""
+type Image implements Component {
+  _context: Context
+  _id: String!
+  image: Asset
+}
+
+"""
+A model is the content structure of a content item that is used in multiple locations in your CMS. A model consists of a number of fields to store your content. Common examples of models are articles, landing pages and products.
+"""
+interface Model {
+  """The time the content item was changed."""
+  _changed_on: String!
+  _context: Context
+  """The time the content item was created."""
+  _created_on: String!
+  """Unique identifier for each content item."""
+  _id: String!
+  """The time for when the content item is or will be published."""
+  _publish_on: String
+  """Calculated time to read in minutes."""
+  _read_time: Int
+  """Unique within Type, string identifier for each content item."""
+  _slug: String
+}
+
+type Query {
+  """Retrieve Agenda."""
+  Agenda(locale: String = "nl-NL", locales: [String]): Agenda
+  """Retrieve items from different model types at once."""
+  ContentItems(limit: Int = 10, locale: String = "nl-NL", people_also_viewed_id: String, skip: Int = 0, sort: ContentItemsSortInput = publish_on_DESC, where: ContentItemsWhereInput): ContentItems
+  """Retrieve Homepage."""
+  Homepage(locale: String = "nl-NL", locales: [String]): Homepage
+}
+
+input SearchOptionsInput {
+  includeNumeric: Boolean
+  includeReferences: Boolean
+}
+
+type SoundCloudPost {
+  _id: String!
+  url: String!
+}
+
+"""Soundcloud component."""
+type Soundcloud implements Component {
+  _context: Context
+  _id: String!
+  soundcloud: SoundCloudPost
+}
+
+"""Spotify component."""
+type Spotify implements Component {
+  _context: Context
+  _id: String!
+  spotify: SpotifyPlaylist
+}
+
+type SpotifyPlaylist {
+  _id: String!
+  url: String!
+}
+
+"""Tekst component."""
+type Tekst implements Component {
+  _context: Context
+  _id: String!
+  distorted: Boolean
+  text: String
+}
+
+"""
+The Date type adheres to ISO 8601 standard. March 14, 1988 is represented as 1988-03-13.
+"""
+scalar _Date
+
+"""
+Event type is specifying the kind of event the customer has with your content.
+"""
+enum _Event {
+  Bookmark
+  Clickthrough
+  Comment
+  Like
+  Purchase
+  Share
+  Subscribe
+  View
+  Vote
+}

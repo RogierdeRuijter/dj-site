@@ -1,9 +1,9 @@
 const fiveDays = 1000 * 60 * 60 * 24 * 5;
+import type { Agenda } from "../types/agenda";
 
-interface Event {
-  date: string | null;
-}
-/*
+type Event = Agenda[number];
+
+  /*
  * Filter past events if they are more than 5 days in the past compared to the current date.
  * @param {Event} event - The event to filter.
  *
