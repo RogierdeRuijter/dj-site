@@ -41,12 +41,24 @@ const { agenda } = Astro.props;
 <style>
   .Agenda-item {
     display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-columns: 1.618fr 3fr 1fr;
     gap: 1rem;
-    --border-color: rgb(226, 232, 240);
-    border-block-end: 0.5px solid var(--border-color);
+    /* --border-color: rgb(226, 232, 240);
+    border-block-end: 0.5px solid var(--border-color); */
     padding-block: 1rem;
     font-size: 1rem;
+    position: relative;
+  }
+
+  .Agenda-item:after {
+    /* border-block-end: none; */
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 0.5px;
+    background-color: currentcolor;
+    opacity: 0.3;
   }
 
   .Agenda-location {
@@ -59,13 +71,11 @@ const { agenda } = Astro.props;
     text-align: right;
     text-decoration: none;
     transition: opacity 0.2s;
-    
+
     &:hover {
       opacity: 1;
     }
   }
-
-
 
   .Agenda-date,
   .Agenda-callToAction,
@@ -78,7 +88,8 @@ const { agenda } = Astro.props;
     text-transform: capitalize;
   }
 
-  .Agenda-brandName, .Agenda-date {
+  .Agenda-brandName,
+  .Agenda-date {
     font-size: 1.5rem;
   }
 </style>
