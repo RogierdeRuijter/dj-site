@@ -18,16 +18,20 @@ const { agenda } = Astro.props;
         .map((event: any) => {
           return (
             <div class="Agenda-item">
-              <time class="Agenda-date" datetime={event.date}>
-                {new Date(event.date).toLocaleDateString("nl-NL", {
-                  weekday: "short",
-                  day: "numeric",
-                  month: "short",
-                })}
-              </time>
+              {event.date && (
+                <time class="Agenda-date" datetime={event.date}>
+                  {new Date(event.date).toLocaleDateString("nl-NL", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </time>
+              )}
               <div class="Agenda-location">
                 <span class="Agenda-brandName">{event.brand_name}</span>
-                <span class="Agenda-subtitle">{event.location}</span>
+                {event.location && (
+                  <span class="Agenda-subtitle">{event.location}</span>
+                )}
               </div>
               <a href={event.ticket_url} class="Agenda-callToAction">
                 {event.label}
@@ -88,5 +92,6 @@ const { agenda } = Astro.props;
   .Agenda-brandName,
   .Agenda-date {
     font-size: 1.5rem;
+    font-weight: 700;
   }
 </style>
