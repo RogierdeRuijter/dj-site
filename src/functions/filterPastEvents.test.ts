@@ -54,4 +54,16 @@ describe("filterPastEvents", () => {
 
     deepEqual(actual, expected);
   });
+
+  it("should not filter out the event if it is not defined", () => {
+    const input = {
+      date: null,
+    };
+
+    const actual = filterPastEvents(input);
+
+    const expected = true;
+
+    deepEqual(actual, expected);
+  });
 });

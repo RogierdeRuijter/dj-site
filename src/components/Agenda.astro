@@ -6,27 +6,28 @@ import { filterPastEvents } from "../functions/filterPastEvents";
 const { agenda } = Astro.props;
 ---
 
-<div>
+<div class="Agenda">
   <h2 class="Agenda-title">Agenda</h2>
   <div>
     {
       agenda
         .filter(filterPastEvents)
         .sort((a: any, b: any) => {
-          return new Date(a.date).valueOf() - new Date(b.date).valueOf();
+          if (!a.date) return 1;
+          if (!b.date) return -1;
+          return new Date(a.date) - new Date(b.date);
         })
         .map((event: any) => {
           return (
             <div class="Agenda-item">
-              {event.date && (
-                <time class="Agenda-date" datetime={event.date}>
-                  {new Date(event.date).toLocaleDateString("nl-NL", {
+              <time class="Agenda-date" datetime={event.date}>
+                {event.date &&
+                  new Date(event.date).toLocaleDateString("nl-NL", {
                     weekday: "short",
                     day: "numeric",
                     month: "short",
                   })}
-                </time>
-              )}
+              </time>
               <div class="Agenda-location">
                 <span class="Agenda-brandName">{event.brand_name}</span>
                 {event.location && (
@@ -43,12 +44,17 @@ const { agenda } = Astro.props;
   </div>
 </div>
 <style>
+  .Agenda {
+    --__large-font-size: 1.5rem;
+    --__small-font-size: 1rem;
+  }
+
   .Agenda-item {
     display: grid;
     grid-template-columns: 1.618fr 3fr min-content;
     gap: 1rem;
     padding-block: 1rem;
-    font-size: 1rem;
+    font-size: var(--__small-font-size);
     position: relative;
   }
 
@@ -91,7 +97,7 @@ const { agenda } = Astro.props;
 
   .Agenda-brandName,
   .Agenda-date {
-    font-size: 1.5rem;
+    font-size: var(--__large-font-size);
     font-weight: 700;
   }
   @media (max-width: 768px) {
@@ -109,7 +115,7 @@ const { agenda } = Astro.props;
 
     .Agenda-date {
       grid-row: 1;
-      font-size: 1rem;
+      font-size: var(--__small-font-size);
     }
 
     .Agenda-location {
