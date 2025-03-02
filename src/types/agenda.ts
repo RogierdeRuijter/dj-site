@@ -1,8 +1,8 @@
-import { StackItem } from "./stackItem";
+import type { StackInformationItem } from "./stackInformationItem";
 
 export type Agenda = NonNullable<
   Extract<
-  StackItem,
+  StackInformationItem,
     { __typename: "Agenda" }
   >
 >["agenda"];

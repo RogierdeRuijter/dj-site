@@ -1,0 +1,82 @@
+---
+import type { Highlighted } from "../types/highlighted";
+
+interface Props {
+  highlighted: Highlighted;
+}
+
+const { highlighted } = Astro.props;
+let thumbnailImage: string | undefined;
+
+if (highlighted.spotify?.url) {
+  const url = new URL("https://open.spotify.com/oembed");
+  url.searchParams.append("url", highlighted.spotify.url);
+
+  const response = await fetch(url.toString());
+  const data = await response.json();
+  const thumbnailUrl = data.thumbnail_url;
+
+  async function imageToBase64(url: string) {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const base64 = Buffer.from(arrayBuffer).toString("base64");
+    return base64;
+  }
+
+  thumbnailImage = await imageToBase64(thumbnailUrl);
+}
+---
+
+<div class="Highlighted">
+  <h2 class="Highlighted-title">{highlighted.title}</h2>
+  <p class="Highlighted-text">{highlighted.text}</p>
+  {
+    thumbnailImage && (
+      <img
+        class="Highlighted-image"
+        src={`data:image/jpeg;base64,${thumbnailImage}`}
+        width="300"
+        height="300"
+        alt=""
+      />
+    )
+  }
+  <a class="Highlighted-link" href={highlighted.spotify?.url}
+    >Beluister op Spotify</a
+  >
+</div>
+
+<style>
+  .Highlighted {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border: 3px solid var(--text-color);
+    width: min-content;
+    gap: 1rem;
+    --__large-font-size: 1.5rem;
+    --__small-font-size: 1rem;
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  .Highlighted-title {
+    order: 1;
+    font-size: var(--__large-font-size);
+  }
+
+  .Highlighted-image {
+    order: 2;
+  }
+
+  .Highlighted-text {
+    order: 3;
+    font-size: var(--__small-font-size);
+  }
+
+  .Highlighted-link {
+    order: 4;
+  }
+</style>

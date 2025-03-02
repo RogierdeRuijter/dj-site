@@ -6,20 +6,6 @@ export const Homepage = graphql(`
       _id
       information {
         __typename
-        ... on Spotify {
-          _id
-          spotify {
-            _id
-            url
-          }
-        }
-        ... on Soundcloud {
-          _id
-          soundcloud {
-            _id
-            url
-          }
-        }
         ... on Tekst {
           _id
           distorted
@@ -45,6 +31,16 @@ export const Homepage = graphql(`
       }
       inspiration {
         __typename
+        ... on Highlighted {
+          text
+          title
+          image {
+            url
+          }
+          spotify {
+            url
+          }
+        }
       }
       information_background_color
       information_text_color

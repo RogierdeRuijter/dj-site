@@ -2,7 +2,7 @@
 import { filterPastEvents } from "../functions/filterPastEvents";
 import type { Agenda } from "../types/agenda";
 
-// TODO: create interface for agenda
+// TODO: make this a server Island, so that the filter runs every time
 interface Props {
   agenda: Agenda;
 }
@@ -16,7 +16,7 @@ const { agenda } = Astro.props;
     {
       agenda
         .filter(filterPastEvents)
-        .sort((a: any, b: any) => {
+        .sort((a, b) => {
           if (!a.date) return 1;
           if (!b.date) return -1;
           return new Date(a.date).valueOf() - new Date(b.date).valueOf();

@@ -220,6 +220,17 @@ input CustomerRelationWhereInput {
   reference_id: String
 }
 
+"""Highlighted component."""
+type Highlighted implements Component {
+  _context: Context
+  _id: String!
+  image: Asset
+  soundcloud: SoundCloudPost
+  spotify: SpotifyPlaylist
+  text: String
+  title: String
+}
+
 """Single Homepage."""
 type Homepage implements Model {
   """Count of bookmark events."""
@@ -279,9 +290,9 @@ type Homepage implements Model {
   title: String
 }
 
-union Homepage_Information = Agenda | Image | Soundcloud | Spotify | Tekst
+union Homepage_Information = Agenda | Image | Tekst
 
-union Homepage_Inspiration = Image | Soundcloud | Spotify | Tekst
+union Homepage_Inspiration = Highlighted | Image | Tekst
 
 """Image component."""
 type Image implements Component {
@@ -326,20 +337,6 @@ input SearchOptionsInput {
 type SoundCloudPost {
   _id: String!
   url: String!
-}
-
-"""Soundcloud component."""
-type Soundcloud implements Component {
-  _context: Context
-  _id: String!
-  soundcloud: SoundCloudPost
-}
-
-"""Spotify component."""
-type Spotify implements Component {
-  _context: Context
-  _id: String!
-  spotify: SpotifyPlaylist
 }
 
 type SpotifyPlaylist {

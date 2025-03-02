@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Agenda from "../components/Agenda.astro";
+import Highlighted from "../components/Highlighted.astro";
 import { mapTextComponent } from "../functions/mapTextComponent";
 import { HomepageDocument } from "../graphql/graphql";
 import { execute } from "../functions/fetchPrepr";
@@ -128,15 +129,12 @@ const inspiration = homepageData.Homepage?.inspiration;
           information?.map((info) => {
             switch (info.__typename) {
               case "Agenda":
-                console.log("Agenda");
                 return <Agenda agenda={info.agenda} />;
               case "Tekst":
                 const text = mapTextComponent(info);
                 return (
                   <span class:list={text.classList} set:html={text.text} />
                 );
-              case "Spotify":
-                return <a href={info.spotify?.url}> {info.spotify?.url} </a>;
               case "Image":
                 return (
                   <img
@@ -159,8 +157,11 @@ const inspiration = homepageData.Homepage?.inspiration;
       >
         <h2 class="title">Isabella</h2>
         {
-          inspiration?.map((inspi: any) => {
+          inspiration?.map((inspi) => {
             switch (inspi.__typename) {
+              case "Highlighted": {
+                return <Highlighted highlighted={inspi} />;
+              }
             }
           })
         }

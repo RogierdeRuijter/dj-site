@@ -1,12 +1,12 @@
-import { StackItem } from "../types/stackItem";
+import type { StackInformationItem } from "../types/stackInformationItem";
 
 interface ReturnType {
   classList: string[];
-  text: string;
+  text: string | null | undefined;
 }
 
 type TextComponent = NonNullable<
-  Extract<StackItem, { __typename: "Tekst" }>
+  Extract<StackInformationItem, { __typename: "Tekst" }>
 >;
 
 export const mapTextComponent = (textComponent: TextComponent): ReturnType => {

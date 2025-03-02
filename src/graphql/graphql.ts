@@ -208,6 +208,18 @@ export type CustomerRelationWhereInput = {
   reference_id?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Highlighted component. */
+export type Highlighted = Component & {
+  __typename?: 'Highlighted';
+  _context?: Maybe<Context>;
+  _id: Scalars['String']['output'];
+  image?: Maybe<Asset>;
+  soundcloud?: Maybe<SoundCloudPost>;
+  spotify?: Maybe<SpotifyPlaylist>;
+  text?: Maybe<Scalars['String']['output']>;
+  title?: Maybe<Scalars['String']['output']>;
+};
+
 /** Single Homepage. */
 export type Homepage = Model & {
   __typename?: 'Homepage';
@@ -272,9 +284,9 @@ export type HomepageInspirationArgs = {
   personalize_for_segments?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
-export type Homepage_Information = Agenda | Image | Soundcloud | Spotify | Tekst;
+export type Homepage_Information = Agenda | Image | Tekst;
 
-export type Homepage_Inspiration = Image | Soundcloud | Spotify | Tekst;
+export type Homepage_Inspiration = Highlighted | Image | Tekst;
 
 /** Image component. */
 export type Image = Component & {
@@ -344,22 +356,6 @@ export type SoundCloudPost = {
   url: Scalars['String']['output'];
 };
 
-/** Soundcloud component. */
-export type Soundcloud = Component & {
-  __typename?: 'Soundcloud';
-  _context?: Maybe<Context>;
-  _id: Scalars['String']['output'];
-  soundcloud?: Maybe<SoundCloudPost>;
-};
-
-/** Spotify component. */
-export type Spotify = Component & {
-  __typename?: 'Spotify';
-  _context?: Maybe<Context>;
-  _id: Scalars['String']['output'];
-  spotify?: Maybe<SpotifyPlaylist>;
-};
-
 export type SpotifyPlaylist = {
   __typename?: 'SpotifyPlaylist';
   _id: Scalars['String']['output'];
@@ -391,7 +387,7 @@ export enum _Event {
 export type HomepageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type HomepageQuery = { __typename?: 'Query', Homepage?: { __typename?: 'Homepage', _id: string, information_background_color?: string | null, information_text_color?: string | null, inspiration_background_color?: string | null, inspiration_text_color?: string | null, information: Array<{ __typename: 'Agenda', agenda: Array<{ __typename?: 'Booking', date?: any | null, brand_name?: string | null, location?: string | null, ticket_url?: string | null, label?: string | null }> } | { __typename: 'Image', _id: string, image?: { __typename?: 'Asset', url?: string | null, width?: number | null, height?: number | null } | null } | { __typename: 'Soundcloud', _id: string, soundcloud?: { __typename?: 'SoundCloudPost', _id: string, url: string } | null } | { __typename: 'Spotify', _id: string, spotify?: { __typename?: 'SpotifyPlaylist', _id: string, url: string } | null } | { __typename: 'Tekst', _id: string, distorted?: boolean | null, text?: string | null }>, inspiration: Array<{ __typename: 'Image' } | { __typename: 'Soundcloud' } | { __typename: 'Spotify' } | { __typename: 'Tekst' }> } | null };
+export type HomepageQuery = { __typename?: 'Query', Homepage?: { __typename?: 'Homepage', _id: string, information_background_color?: string | null, information_text_color?: string | null, inspiration_background_color?: string | null, inspiration_text_color?: string | null, information: Array<{ __typename: 'Agenda', agenda: Array<{ __typename?: 'Booking', date?: any | null, brand_name?: string | null, location?: string | null, ticket_url?: string | null, label?: string | null }> } | { __typename: 'Image', _id: string, image?: { __typename?: 'Asset', url?: string | null, width?: number | null, height?: number | null } | null } | { __typename: 'Tekst', _id: string, distorted?: boolean | null, text?: string | null }>, inspiration: Array<{ __typename: 'Highlighted', text?: string | null, title?: string | null, image?: { __typename?: 'Asset', url?: string | null } | null, spotify?: { __typename?: 'SpotifyPlaylist', url: string } | null } | { __typename: 'Image' } | { __typename: 'Tekst' }> } | null };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -414,20 +410,6 @@ export const HomepageDocument = new TypedDocumentString(`
     _id
     information {
       __typename
-      ... on Spotify {
-        _id
-        spotify {
-          _id
-          url
-        }
-      }
-      ... on Soundcloud {
-        _id
-        soundcloud {
-          _id
-          url
-        }
-      }
       ... on Tekst {
         _id
         distorted
@@ -453,6 +435,16 @@ export const HomepageDocument = new TypedDocumentString(`
     }
     inspiration {
       __typename
+      ... on Highlighted {
+        text
+        title
+        image {
+          url
+        }
+        spotify {
+          url
+        }
+      }
     }
     information_background_color
     information_text_color
